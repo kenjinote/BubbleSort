@@ -5,20 +5,20 @@
 TCHAR szClassName[] = TEXT("Window");
 #define N 10
 
-void BubleSort(int* sort, int nCount)
+void BubleSort(int* data, int size)
 {
 	BOOL bFlag;
 	int k = 0;
 	do {
 		bFlag = FALSE;
-		for (int i = 0; i < nCount - 1 - k; i++)
+		for (int i = 0; i < size - 1 - k; i++)
 		{
-			if (sort[i] > sort[i + 1])
+			if (data[i] > data[i + 1])
 			{
 				bFlag = TRUE;
-				const int nTmp = sort[i];
-				sort[i] = sort[i + 1];
-				sort[i + 1] = nTmp;
+				const int nTmp = data[i];
+				data[i] = data[i + 1];
+				data[i + 1] = nTmp;
 			}
 		}
 		k++;
@@ -27,7 +27,7 @@ void BubleSort(int* sort, int nCount)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
-	static int sort[N];
+	static int data[N];
 	static HWND hButton;
 	switch (msg)
 	{
@@ -35,7 +35,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		hButton = CreateWindow(TEXT("BUTTON"), TEXT("ソート"), WS_VISIBLE | WS_CHILD, 0, 0, 0, 0, hWnd, (HMENU)IDOK, ((LPCREATESTRUCT)lParam)->hInstance, 0);
 		for (int i = 0; i < N; i++)
 		{
-			sort[i] = rand() % N;
+			data[i] = rand() % N;
 		}
 		break;
 	case WM_PAINT:
@@ -45,7 +45,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			TCHAR szText[256];
 			for (int i = 0; i < N; i++)
 			{
-				wsprintf(szText, TEXT("%d"), sort[i]);
+				wsprintf(szText, TEXT("%d"), data[i]);
 				TextOut(hdc, 10, i * 32 + 50, szText, lstrlen(szText));
 			}		
 			EndPaint(hWnd, &ps);
@@ -57,7 +57,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		if (LOWORD(wParam) == IDOK)
 		{
-			BubleSort(sort, N);
+			BubleSort(data, N);
 			InvalidateRect(hWnd, 0, 1);
 			MessageBox(hWnd, TEXT("ソートしました"), TEXT("確認"), 0);
 		}
